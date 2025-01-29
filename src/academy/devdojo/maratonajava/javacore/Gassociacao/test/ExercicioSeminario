@@ -1,0 +1,14 @@
+Crie um sistema que gerencie um Seminario
+
+O sistema deverá cadastrar seminários, estudantes, professor e local onde será realizado o seminário
+
+Um Aluno poderá estar em apenas um seminário,
+Um Seminário poderá ter nenhum ou vários alunos,
+Um Professor poderá ministrar vários seminários,
+Um Seminário deve ter u Local
+
+Campos bpasicos(ecluindo relacionamento)
+Semiário: Titulo,
+Aluno: nome e idade,
+Professor: nome, especialidade,
+Local: endereço.
