@@ -10,5 +10,11 @@ public class DataLoaderTest01 {
 
         databaseLoader.Load();
         fileLoader.Load();
+
+        databaseLoader.remove();
+        fileLoader.remove();
+
+        databaseLoader.checkPermission();
+        fileLoader.checkPermission();
     }
 }
