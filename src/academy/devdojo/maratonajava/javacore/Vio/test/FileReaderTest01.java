@@ -9,7 +9,9 @@ public class FileReaderTest01 {
     public static void main(String[] args) throws IOException {
         File file = new File("file.txt");
         try (FileReader fr = new FileReader(file)){
-//            char[] in = new char[30];
+//            char[] in = new char[1000];
+//            int size = fr.read(in);
+//            System.out.println(size);
 //            fr.read(in);
 //            for (char c : in) {
 //                System.out.println(c);
