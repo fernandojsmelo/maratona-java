@@ -7,13 +7,13 @@ public class OuterClassesTest02 {
         class LocalClass{
             final String lastName = "Izuku";
 
-            public void printLocal(final String param){
-                System.out.println(param);
+            public void printLocal(){
+
                 System.out.println(name + " " + lastName);
             }
         }
-        new LocalClass().printLocal();
-
+        LocalClass localClass = new LocalClass();
+        localClass.printLocal();
     }
 
     public static void main(String[] args) {
