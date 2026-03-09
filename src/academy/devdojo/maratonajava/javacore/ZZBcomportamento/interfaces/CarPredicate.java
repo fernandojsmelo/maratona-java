@@ -4,7 +4,7 @@ import academy.devdojo.maratonajava.javacore.ZZBcomportamento.dominio.Car;
 
 @FunctionalInterface
 public interface CarPredicate {
-    // anonimas, fubcões, conciso
+    // anonimas, funcões, conciso
     boolean test(Car car);
     // (paramentro) -> <expressão>
     // (Car car)    -> car.getColor().equals("green")
