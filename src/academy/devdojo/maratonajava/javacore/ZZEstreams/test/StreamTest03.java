@@ -22,7 +22,10 @@ public class StreamTest03 {
         Stream<LightNovel> stream = lightNovels.stream();
         lightNovels.forEach(System.out::println);
 
-        long count = stream.filter(ln -> ln.getPrice() <= 4).count();
+        long count = stream
+                .filter(ln -> ln.getPrice() <= 4)
+                .count();
+
         long count2 = lightNovels.stream()
                 .distinct()
                 .filter(ln -> ln.getPrice() <= 4)
