@@ -1,0 +1,17 @@
+- Benchmark
+- Unboxing | boxing
+- (limit, findFirst) (findAny)
+- Custo total da computação N, P
+- Quantidade de dados
+- Tipos de coleções
+- Tamanho do stream (tamanho definido)
+- Processamento merge
+
+if(tarefa foe pequena e não pode ser dividida)
+faz sequencialmente
+else{
+divide em duas tarefas
+chama o metodo recursivamente
+espera todos as tarefas serem completadas Combina o resultado
+
+}
