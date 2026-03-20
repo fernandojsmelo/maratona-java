@@ -1,5 +1,6 @@
 package academy.devdojo.maratonajava.javacore.ZZGconcorrencia.test;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 class Worker implements Runnable {
@@ -16,16 +17,24 @@ class Worker implements Runnable {
     public void run() {
         lock.lock();
         try {
+            //lock.tryLock(2, TimeUnit.SECONDS);
+
             if (lock.isHeldByCurrentThread()) {
-                System.out.printf("Thread %s entrou em uma sessão critica%n ", name);
+                System.out.printf("Thread %s pegou o LOCK%n ", name);
             }
+
+            System.out.printf("Thread %s entrou em uma sessão critica%n ", name);
+
             System.out.printf("%d Threads esperando na fila%n ", lock.getQueueLength());
             System.out.printf("Thread %s vai esperar 2s%n ", name);
             Thread.sleep(2000);
             System.out.printf("Thread %s finalizou a espera%n ", name);
+
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+
         } finally {
+
             lock.unlock();
         }
     }

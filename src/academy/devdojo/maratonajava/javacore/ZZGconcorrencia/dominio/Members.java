@@ -1,12 +1,16 @@
-package academy.devdojo.maratonajava.javacore.ZZFthreads.dominio;
+package academy.devdojo.maratonajava.javacore.ZZGconcorrencia.dominio;
 
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Members {
     String threadName = Thread.currentThread().getName();
 
     private final Queue<String> emails = new ArrayBlockingQueue<>(10);
+    private final ReentrantLock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
     private boolean open = true;
 
     public boolean isOpen() {
@@ -14,39 +18,51 @@ public class Members {
     }
 
     public int pendingEmails() {
-        synchronized (emails) {
+        lock.lock();
+        try {
             return emails.size();
+        }finally {
+            lock.unlock();
         }
     }
 
     public void addMemberEmail(String email){
-        synchronized (this.emails){
+        lock.lock();
+        try {
             //String threadName = Thread.currentThread().getName();
             System.out.println(threadName + " Adicionando email na Lista");
             this.emails.add(email);
-            this.emails.notifyAll();
+            condition.signalAll();
+        }finally {
+            lock.unlock();
         }
     }
 
     public String retrieveEmail() throws InterruptedException {
         System.out.println(threadName + " Checking if there are emails");
-        synchronized (this.emails){
+        lock.lock();
+        try {
             while (this.emails.size() == 0){
                 if (!open) return null;
                 System.out.println(Thread.currentThread().getName() +
                     " Não tem email disponivel na lista, entrando em modo de espera");
-                this.emails.wait();
+                condition.await();
             }
             return this.emails.poll();
+        }finally {
+            lock.unlock();
         }
     }
 
     public void closse(){
         open = false;
-        synchronized (this.emails){
+        lock.lock();
+        try {
             System.out.println(Thread.currentThread().getName() +
                     " Notificando todo mundo que não estamos mais pegando emails");
-            this.emails.notifyAll();
+            condition.signalAll();
+        }finally {
+            lock.unlock();
         }
     }
 }
