@@ -22,7 +22,7 @@ public final class Quote {
     public static Quote newQuote(String value){
         String[] values = value.split(":");
         return new Quote(values[0],
-                         Double.parseDouble(new String(values[1])),
+                         Double.parseDouble(values[1]),
                          Discount.Code.valueOf(values[2])
         );
     }
