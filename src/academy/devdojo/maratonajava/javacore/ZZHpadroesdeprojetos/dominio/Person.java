@@ -33,6 +33,10 @@ public class Person {
         public PersonBuilder() {
         }
 
+        public static Person.PersonBuilder builder() {
+            return new Person.PersonBuilder();
+        }
+
         public PersonBuilder firstName(String firstName) {
             this.firstName = firstName;
             return this;
@@ -56,5 +60,9 @@ public class Person {
         public Person build() {
             return new Person(firstName, lastName, userName, email);
         }
+
+    }
+    public String getFirstName() {
+        return firstName;
     }
 }
