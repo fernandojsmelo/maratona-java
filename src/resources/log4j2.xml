@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extra logging related to initialization of Log4j.
+ Set to debug or trace if log4j initialization is failing. -->
+<Configuration status="DEBUG">
+    <Appenders>
+        <!-- Console appender configuration -->
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} %c{1}:%L - %m%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- Root logger referring to console appender -->
+        <Logger name="academy.devdojo" level= "info" additivity="false">
+                <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Root level="error" >
+            <AppenderRef ref="LogToConsole" />
+        </Root>
+    </Loggers>
+</Configuration>
