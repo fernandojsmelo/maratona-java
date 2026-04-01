@@ -1,7 +1,6 @@
 package academy.devdojo.maratonajava.javacore.Oexception.excepton.test;
 
 import java.io.File;
-import java.io.IO;
 import java.io.IOException;
 
 public class ExceptionTest02 {

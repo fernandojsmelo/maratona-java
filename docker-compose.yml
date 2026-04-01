@@ -6,7 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "8080:8080"
+      - "3206:3206"
     volumes:
       - devdojo_maratona_data:/var/lib/mysql
 volumes:
