@@ -14,9 +14,10 @@ public class ProducerRepository {
                 "INSERT INTO `anime_store`.`producer` (`name`) VALUES ('%s');"
                         .formatted(producer.getName());
         try (Connection conn = ConnectFactory.getConnection();
-             Statement stmt = conn.createStatement()){
+             Statement stmt = conn.createStatement()) {
             int rowsAffected = stmt.executeUpdate(sql);
-            log.info("Inserted producer in the dataBase rows affected '{}'",
+            log.info("Inserted producer '{}' in the dataBase rows affected '{}'",
+                    producer.getName(),
                     rowsAffected)
             ;
             log.error("Inserted producer in the dataBase rows affected '{}'",
@@ -25,7 +26,37 @@ public class ProducerRepository {
 //            System.out.println(rowsAffected);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error("Error while trying to insert produce '{}'",
+                    producer.getName(),
+                    e)
+            ;
+        }
+//        DELETE FROM `anime_store`.`producer` WHERE (`id` = '16');
+
+    }
+
+    public static void delete(int id) {
+        String sql =
+                "DELETE FROM `anime_store`.`producer` WHERE (`id` = '%d');"
+                        .formatted(id);
+        try (Connection conn = ConnectFactory.getConnection();
+             Statement stmt = conn.createStatement()) {
+            int rowsAffected = stmt.executeUpdate(sql);
+            log.info("Deleted producer '{}' from the dataBase rows affected '{}'",
+                    id,
+                    rowsAffected)
+            ;
+            log.error("Deleted producer '{}' fom the dataBase rows affected '{}'",
+                    id,
+                    rowsAffected)
+            ;
+//            System.out.println(rowsAffected);
+
+        } catch (Exception e) {
+            log.error("Error while trying to deleted produce '{}'",
+                    id,
+                    e)
+            ;
         }
     }
 }
