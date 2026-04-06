@@ -5,7 +5,10 @@ import academy.devdojo.maratonajava.javacore.ZZIjdbc.dominio.Producer;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 public class ProducerRepository {
@@ -85,5 +88,31 @@ public class ProducerRepository {
         }
 //        DELETE FROM `anime_store`.`producer` WHERE (`id` = '16');
 
+    }
+
+    public static List<Producer> findAll() {
+        log.info("Finding all Producers");
+        log.error("Finding all Producers");
+
+        String sql = "select id, name from anime_store.producer;";
+        List<Producer> producers = new ArrayList<>();
+        try (Connection conn = ConnectFactory.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+
+                Producer producer = Producer
+                        .builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .build();
+                producers.add(producer);
+            }
+        } catch (Exception e) {
+            log.error("Error while trying to find all produce", e);
+        }
+
+        return producers;
     }
 }
