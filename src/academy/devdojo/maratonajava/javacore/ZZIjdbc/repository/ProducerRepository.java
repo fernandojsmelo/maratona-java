@@ -4,10 +4,7 @@ import academy.devdojo.maratonajava.javacore.ZZIjdbc.conn.ConnectFactory;
 import academy.devdojo.maratonajava.javacore.ZZIjdbc.dominio.Producer;
 import lombok.extern.log4j.Log4j2;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,10 +142,10 @@ public class ProducerRepository {
 
         return producers;
     }
-    
+
     public static void showProducerMetadata() {
-        log.info("Finding by name Producers");
-        log.error("Finding by name Producers");
+        log.info("Showing Producer MetaData");
+        log.error("Showing Producer MetaData");
 
         String sql = "select * from anime_store.producer;";
 
@@ -157,7 +154,6 @@ public class ProducerRepository {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             ResultSetMetaData rsMetaData = rs.getMetaData();
-            rs.next();
             int columnCount = rsMetaData.getColumnCount();
             log.error("Columns count '{}'", columnCount);
             for (int i = 1; i <= columnCount; i++) {
@@ -165,6 +161,40 @@ public class ProducerRepository {
                 log.error("Column name '{}'", rsMetaData.getColumnName(i));
                 log.error("Column size '{}'", rsMetaData.getColumnDisplaySize(i));
                 log.error("Column type '{}'", rsMetaData.getColumnTypeName(i));
+            }
+        } catch (Exception e) {
+            log.error("Error while trying to find all produce", e);
+        }
+    }
+
+    public static void showDriverMetaData() {
+        log.info("Showing Driver MetaData");
+        log.error("Showing Driver MetaData");
+
+        try (Connection conn = ConnectFactory.getConnection()) {
+            DatabaseMetaData dbMetaData = conn.getMetaData();
+            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_FORWARD_ONLY)){
+                log.error("Supports TYPE_FORWARD_ONLY");
+                if (dbMetaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)){
+                    log.error("And Supports CONCUR_UPDATABLE");
+                }
+            }
+
+            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE)){
+                log.error("Supports TYPE_SCROLL_INSENSITIVE");
+                if (dbMetaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)){
+                    log.error("And Supports CONCUR_UPDATABLE");
+                }
+            }
+
+            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE)){
+                log.error("Supports TYPE_SCROLL_SENSITIVE");
+                if (dbMetaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)){
+                    log.error("And Supports CONCUR_UPDATABLE");
+                }
             }
         } catch (Exception e) {
             log.error("Error while trying to find all produce", e);
