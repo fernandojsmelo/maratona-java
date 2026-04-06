@@ -37,6 +37,7 @@ public class ConnectionFactoryTest01 {
 //        log.error("Producers found '{}'",producers);
 
 //        ProducerService.showProducerMetadata();
-        ProducerService.showDriverMetaData();
+//        ProducerService.showDriverMetaData();
+        ProducerService.showTypeScrollWoring();
     }
 }

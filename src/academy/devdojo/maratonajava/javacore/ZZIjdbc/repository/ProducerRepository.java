@@ -173,31 +173,106 @@ public class ProducerRepository {
 
         try (Connection conn = ConnectFactory.getConnection()) {
             DatabaseMetaData dbMetaData = conn.getMetaData();
-            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_FORWARD_ONLY)){
+            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_FORWARD_ONLY)) {
                 log.error("Supports TYPE_FORWARD_ONLY");
                 if (dbMetaData.supportsResultSetConcurrency(
-                        ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)){
+                        ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)) {
                     log.error("And Supports CONCUR_UPDATABLE");
                 }
             }
 
-            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE)){
+            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE)) {
                 log.error("Supports TYPE_SCROLL_INSENSITIVE");
                 if (dbMetaData.supportsResultSetConcurrency(
-                        ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)){
+                        ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
                     log.error("And Supports CONCUR_UPDATABLE");
                 }
             }
 
-            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE)){
+            if (dbMetaData.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE)) {
                 log.error("Supports TYPE_SCROLL_SENSITIVE");
                 if (dbMetaData.supportsResultSetConcurrency(
-                        ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)){
+                        ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
                     log.error("And Supports CONCUR_UPDATABLE");
                 }
             }
         } catch (Exception e) {
             log.error("Error while trying to find all produce", e);
         }
+    }
+
+    public static void showTypeScrollWoring() {
+        String sql = "select * from anime_store.producer ;";
+
+        try (Connection conn = ConnectFactory.getConnection();
+             Statement stmt = conn.createStatement(
+                     ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+             ResultSet rs = stmt.executeQuery(sql)) {
+            log.error("Last row? '{}'", rs.last());
+            log.error("Row number? '{}'", rs.getRow());
+            log.error(Producer
+                    .builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .build()
+            );
+
+            log.error("===================================================");
+
+            log.error("First row? '{}'", rs.first());
+            log.error("Row number? '{}'", rs.getRow());
+            log.error(Producer
+                    .builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .build()
+            );
+
+            log.error("===================================================");
+
+            log.error("Row Absolute? '{}'", rs.absolute(2));
+            log.error("Row number? '{}'", rs.getRow());
+            log.error(Producer
+                    .builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .build()
+            );
+
+            log.error("===================================================");
+
+            log.error("Row Relative? '{}'", rs.relative(-1));
+            log.error("Row number? '{}'", rs.getRow());
+            log.error(Producer
+                    .builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .build()
+            );
+
+            log.error("===================================================");
+
+            log.error("Is Last? '{}'", rs.isLast());
+            log.error("Row number? '{}'", rs.getRow());
+
+            log.error("======Last Row 2===================================");
+
+            log.error("Last Row? '{}'", rs.last());
+
+            log.error("===================================================");
+            rs.next();
+            log.error("After last Row? '{}'", rs.isAfterLast());
+            while (rs.previous()){
+                log.error(Producer
+                        .builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .build()
+                );
+            }
+        } catch (Exception e) {
+            log.error("Error while trying to find all produce", e);
+        }
+
     }
 }
