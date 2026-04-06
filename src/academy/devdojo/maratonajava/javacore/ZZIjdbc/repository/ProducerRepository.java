@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,5 +144,30 @@ public class ProducerRepository {
         }
 
         return producers;
+    }
+    
+    public static void showProducerMetadata() {
+        log.info("Finding by name Producers");
+        log.error("Finding by name Producers");
+
+        String sql = "select * from anime_store.producer;";
+
+        try (Connection conn = ConnectFactory.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            ResultSetMetaData rsMetaData = rs.getMetaData();
+            rs.next();
+            int columnCount = rsMetaData.getColumnCount();
+            log.error("Columns count '{}'", columnCount);
+            for (int i = 1; i <= columnCount; i++) {
+                log.error("Table name '{}'", rsMetaData.getTableName(i));
+                log.error("Column name '{}'", rsMetaData.getColumnName(i));
+                log.error("Column size '{}'", rsMetaData.getColumnDisplaySize(i));
+                log.error("Column type '{}'", rsMetaData.getColumnTypeName(i));
+            }
+        } catch (Exception e) {
+            log.error("Error while trying to find all produce", e);
+        }
     }
 }
