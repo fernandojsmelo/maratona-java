@@ -33,6 +33,7 @@ public class ConnectionFactoryTest01 {
 //        ProducerService.delete(20);
 //        ProducerService.update(producerToUpdate);
         List<Producer> producers = ProducerService.findAll();
+//        List<Producer> producers = ProducerService.findByName("Mad");
         log.error("Producers found '{}'",producers);
     }
 }
