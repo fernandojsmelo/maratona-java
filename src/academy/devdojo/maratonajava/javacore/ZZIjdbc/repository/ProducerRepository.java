@@ -143,6 +143,37 @@ public class ProducerRepository {
         return producers;
     }
 
+    public static List<Producer> findByNamePreparedStatement(String name) {
+        log.error("Finding by name Producers");
+
+        String sql = "select * from anime_store.producer where name like ?;";
+        List<Producer> producers = new ArrayList<>();
+        try (Connection conn = ConnectFactory.getConnection();
+             PreparedStatement ps = createdPreparedStatement(conn, sql, name);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                Producer producer = Producer
+                        .builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .build();
+                producers.add(producer);
+            }
+        } catch (Exception e) {
+            log.error("Error while trying to find all produce", e);
+        }
+
+        return producers;
+    }
+
+    private static PreparedStatement createdPreparedStatement(Connection conn, String sql, String name) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, "%" + name + "%");
+        return ps;
+    }
+
     public static void showProducerMetadata() {
         log.info("Showing Producer MetaData");
         log.error("Showing Producer MetaData");
@@ -342,7 +373,7 @@ public class ProducerRepository {
                      ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE
              );
              ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()){
+            while (rs.next()) {
                 log.error("Deleting '{}'", rs.getString("name"));
                 rs.deleteRow();
             }
