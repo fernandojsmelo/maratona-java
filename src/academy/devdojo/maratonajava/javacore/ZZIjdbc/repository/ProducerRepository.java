@@ -262,7 +262,7 @@ public class ProducerRepository {
             log.error("===================================================");
             rs.next();
             log.error("After last Row? '{}'", rs.isAfterLast());
-            while (rs.previous()){
+            while (rs.previous()) {
                 log.error(Producer
                         .builder()
                         .id(rs.getInt("id"))
@@ -290,7 +290,9 @@ public class ProducerRepository {
 
             while (rs.next()) {
                 rs.updateString(
-                        "name",rs.getString("name").toUpperCase());
+                        "name", rs.getString("name").toUpperCase());
+//                rs.cancelRowUpdates(); // Quando tiver que cancelar uma alteração
+                // Só é usado antes do UpdateRow
                 rs.updateRow();
                 Producer producer = Producer
                         .builder()
@@ -304,5 +306,67 @@ public class ProducerRepository {
         }
 
         return producers;
+    }
+
+    public static List<Producer> findByNameAndInsertWhenNotFound(String name) {
+        log.error("Finding by name Producers");
+
+        String sql = "select * from anime_store.producer where name like '%%%s%%';"
+                .formatted(name);
+        List<Producer> producers = new ArrayList<>();
+        try (Connection conn = ConnectFactory.getConnection();
+             Statement stmt = conn.createStatement(
+                     ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE
+             );
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) return producers;
+
+            insertNewProducer(name, rs);
+            producers.add(getProducer(rs));
+
+        } catch (Exception e) {
+            log.error("Error while trying to find all produce", e);
+        }
+
+        return producers;
+    }
+
+    public static void findByNameAndDelete(String name) {
+        log.error("Finding by name Producers");
+
+        String sql = "select * from anime_store.producer where name like '%%%s%%';"
+                .formatted(name);
+        try (Connection conn = ConnectFactory.getConnection();
+             Statement stmt = conn.createStatement(
+                     ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE
+             );
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()){
+                log.error("Deleting '{}'", rs.getString("name"));
+                rs.deleteRow();
+            }
+
+        } catch (Exception e) {
+            log.error("Error while trying to find all produce", e);
+        }
+
+    }
+
+    private static void insertNewProducer(String name, ResultSet rs) throws SQLException {
+        rs.moveToInsertRow();
+        rs.updateString("name", name);
+        rs.insertRow();
+    }
+
+    private static Producer getProducer(ResultSet rs) throws SQLException {
+        rs.beforeFirst();
+        rs.next();
+        return Producer
+                .builder()
+                .id(rs.getInt("id"))
+                .name(rs.getString("name"))
+                .build();
+
     }
 }
