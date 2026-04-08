@@ -13,7 +13,7 @@ public class ConnectionFactoryTest01 {
 //        Producer producer = Producer.builder().name("Studio Deen").build();
         Producer producerToUpdate = Producer.builder()
                 .id(1)
-                .name("MADHOUSE")
+                .name("madhouse")
                 .build();
 //        ProducerService.save(producer);
 //        ProducerService.delete(6);
@@ -44,8 +44,9 @@ public class ConnectionFactoryTest01 {
 //                findByNameAndInsertWhenNotFound("A-1 pictures");
 //        log.error("Producers found '{}'",producer);
 //        ProducerService.findByNameAndDelete("A-1 pictures");
-        List<Producer> producer = ProducerService
-                .findByNamePreparedStatement("Bones");
-        log.error("Producers found '{}'",producer);
+//        List<Producer> producer = ProducerService
+//                .findByNamePreparedStatement("Bones");
+//        log.error("Producers found '{}'",producer);
+        ProducerService.updatePreparedStatement(producerToUpdate);
     }
 }
