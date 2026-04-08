@@ -1,0 +1,11 @@
+DELIMITER //
+create procedure sp_get_producer_by_name(name varchar(100))
+BEGIN
+select * from producer P where P.name like name;
+END//
+DELIMITER ;
+
+
+CALL `anime_store`.`sp_get_producer_by_name`('MHK');
+
+select * from producer ;
