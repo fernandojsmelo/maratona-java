@@ -1,5 +1,7 @@
 package academy.devdojo.maratonajava.javacore.ZZIjdbc.conn;
 
+import javax.sql.rowset.JdbcRowSet;
+import javax.sql.rowset.RowSetProvider;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,9 +13,18 @@ public class ConnectFactory {
         String username = "root";
         String password = "root";
 
-        Connection connection = DriverManager.getConnection(url, username, password);
-        System.out.println(connection);
+        return DriverManager.getConnection(url, username, password);
+    }
 
-        return connection;
+    public static JdbcRowSet getJdbcRowSet() throws SQLException {
+        String url = "JDBC:mysql://localhost:3306/anime_store";
+        String username = "root";
+        String password = "root";
+        JdbcRowSet jdbcRowSet = RowSetProvider.newFactory().createJdbcRowSet();;
+        jdbcRowSet.setUrl(url);
+        jdbcRowSet.setUsername(username);
+        jdbcRowSet.setPassword(password);
+
+        return jdbcRowSet;
     }
 }
